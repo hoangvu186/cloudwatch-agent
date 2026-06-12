@@ -1,0 +1,147 @@
+{
+  "agent": {
+    "metrics_collection_interval": 60,
+    "run_as_user": "root"
+  },
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/log/messages",
+            "log_group_name": "/aws/ec2/system-logs",
+            "log_stream_name": "{instance_id}-messages",
+            "retention_in_days": 7,
+            "timestamp_format": "%b %d %H:%M:%S"
+          },
+          {
+            "file_path": "/var/log/secure",
+            "log_group_name": "/aws/ec2/security-logs",
+            "log_stream_name": "{instance_id}-secure",
+            "retention_in_days": 30,
+            "timestamp_format": "%b %d %H:%M:%S"
+          },
+          {
+            "file_path": "/var/log/cloud-init-output.log",
+            "log_group_name": "/aws/ec2/cloud-init",
+            "log_stream_name": "{instance_id}-cloud-init",
+            "retention_in_days": 7,
+            "timestamp_format": "%Y-%m-%d %H:%M:%S"
+          }
+        ]
+      }
+    }
+  },
+  "metrics": {
+    "namespace": "CustomApplication",
+    "metrics_collected": {
+      "cpu": {
+        "measurement": [
+          {
+            "name": "cpu_usage_idle",
+            "rename": "CPU_IDLE",
+            "unit": "Percent"
+          },
+          {
+            "name": "cpu_usage_iowait",
+            "rename": "CPU_IOWAIT",
+            "unit": "Percent"
+          },
+          {
+            "name": "cpu_usage_system",
+            "rename": "CPU_SYSTEM",
+            "unit": "Percent"
+          },
+          {
+            "name": "cpu_usage_user",
+            "rename": "CPU_USER",
+            "unit": "Percent"
+          }
+        ],
+        "metrics_collection_interval": 60,
+        "resources": [
+          "*"
+        ],
+        "totalcpu": false
+      },
+      "disk": {
+        "measurement": [
+          {
+            "name": "used_percent",
+            "rename": "DISK_USED_PERCENT",
+            "unit": "Percent"
+          },
+          {
+            "name": "inodes_free",
+            "rename": "DISK_INODES_FREE",
+            "unit": "Count"
+          }
+        ],
+        "metrics_collection_interval": 60,
+        "resources": [
+          "*"
+        ],
+        "ignore_file_system_types": [
+          "devtmpfs",
+          "tmpfs"
+        ]
+      },
+      "mem": {
+        "measurement": [
+          {
+            "name": "mem_used_percent",
+            "rename": "MEM_USED_PERCENT",
+            "unit": "Percent"
+          },
+          {
+            "name": "mem_available",
+            "rename": "MEM_AVAILABLE",
+            "unit": "Megabytes"
+          }
+        ],
+        "metrics_collection_interval": 60
+      },
+      "netstat": {
+        "measurement": [
+          {
+            "name": "tcp_established",
+            "rename": "TCP_ESTABLISHED",
+            "unit": "Count"
+          },
+          {
+            "name": "tcp_time_wait",
+            "rename": "TCP_TIME_WAIT",
+            "unit": "Count"
+          }
+        ],
+        "metrics_collection_interval": 60
+      },
+      "processes": {
+        "measurement": [
+          {
+            "name": "running",
+            "rename": "PROCESSES_RUNNING",
+            "unit": "Count"
+          },
+          {
+            "name": "sleeping",
+            "rename": "PROCESSES_SLEEPING",
+            "unit": "Count"
+          },
+          {
+            "name": "total",
+            "rename": "PROCESSES_TOTAL",
+            "unit": "Count"
+          }
+        ],
+        "metrics_collection_interval": 60
+      }
+    },
+    "append_dimensions": {
+      "InstanceId": "${aws:InstanceId}",
+      "ImageId": "${aws:ImageId}",
+      "InstanceType": "${aws:InstanceType}",
+      "Environment": "Production"
+    }
+  }
+}
